@@ -13,15 +13,14 @@
 
 <style>
 /* ============================================================
-   Lucy Tam - portfolio
-   paper + ink + one green pen
+   Lucy Tam - portfolio website
    ============================================================ */
 :root {
-  --paper:   #faf7f0;
-  --ink:     #22221f;
-  --ink-soft:#55534c;
-  --pen:     #6f8f6b;   /* sage green pen */
-  --marker:  #f4e9a8;   /* highlighter yellow */
+  --paper:   #DFDFC3;
+  --ink:     #344C4C;
+  --ink-soft:#296B72;
+  --pen:     #5D9372;  
+  --marker:  #C8DC5A;   
   --line:    2px;
 }
 
@@ -33,12 +32,12 @@ body {
   background: var(--paper);
   color: var(--ink);
   font-family: "IBM Plex Sans", sans-serif;
-  font-size: 17px;
+  font-size: 16px;
   line-height: 1.6;
   overflow-x: hidden;
   /* faint dot-grid, like a sketchbook page */
-  background-image: radial-gradient(rgba(34,34,31,.08) 1px, transparent 1px);
-  background-size: 26px 26px;
+  background-image: radial-gradient(rgba(26, 85, 72, 0.01) 1px, transparent 1px);
+  background-size: 30px 30px;
 }
 
 ::selection { background: var(--marker); }
@@ -46,7 +45,7 @@ body {
 /* ---------- clean borders ---------- */
 .sketch {
   border: var(--line) solid var(--ink);
-  border-radius: 10px;
+  border-radius: 5px;
 }
 
 /* underlined links */
@@ -98,8 +97,8 @@ nav {
   border-bottom: var(--line) solid var(--ink);
 }
 nav .logo {
-  font-family: "Jersey 10", monospace;
-  font-size: 1.7rem;
+  font-family: "Micro 5", monospace;
+  font-size: 2.4rem;
   text-decoration: none;
 }
 nav ul {
@@ -314,6 +313,58 @@ section { padding: 4.5rem clamp(1rem, 5vw, 4rem); max-width: 1100px; margin: 0 a
 
 .about-grid .bio p + p { margin-top: 1rem; }
 
+/* logo row (Imperial / RCA / 1851) */
+.bio-logos {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+  margin: 1rem 0;
+}
+.bio-logo {
+  width: clamp(50px, 11vw, 90px);
+  height: clamp(50px, 11vw, 90px);
+  object-fit: contain;
+}
+.logo-imperial { filter: saturate(0%); }
+.logo-1851-wrap { position: relative; display: inline-flex; }
+.logo-1851 { cursor: pointer; }
+
+/* speech bubble for the 1851 logo, shown on hover or click */
+.speech-bubble {
+  display: none;
+  position: absolute;
+  left: calc(100% + 14px);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 230px;
+  background: var(--paper);
+  border: var(--line) solid var(--ink);
+  border-radius: 10px;
+  padding: .75rem .9rem;
+  font-size: .82rem;
+  line-height: 1.45;
+  color: var(--ink);
+  box-shadow: 3px 4px 0 rgba(34,34,31,.9);
+  z-index: 10;
+}
+.speech-bubble::before {
+  content: "";
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 8px solid transparent;
+  border-right-color: var(--ink);
+}
+.logo-1851-wrap:hover .speech-bubble,
+.logo-1851-wrap.active .speech-bubble {
+  display: block;
+}
+@media (max-width: 780px) {
+  .speech-bubble { left: 0; top: calc(100% + 10px); transform: none; }
+  .speech-bubble::before { display: none; }
+}
+
 .fact-box {
   padding: 1.3rem 1.4rem;
   margin-bottom: 1.4rem;
@@ -391,11 +442,11 @@ footer {
 
 <!-- ============ NAV ============ -->
 <nav>
-  <a class="logo" href="#top">lucy tam</a>
+  <a class="logo" href="#top">squam</a>
   <ul>
-      <li><a href="#about">about</a></li>
+      <li><a href="#about">bio</a></li>
     <li><a href="#contact">contact</a></li>
-     <li><a href="#projects">projects</a></li>
+     <li><a href="#projects">projects I like</a></li>
   </ul>
 </nav>
 
@@ -403,15 +454,15 @@ footer {
 <header class="hero" id="top">
 
   <!-- penguin mascot (click me) -->
-  <button class="penguin-wrap" id="penguin" aria-label="squam the penguin. click for a squak.">
-    <span class="squeak" id="squeak">squak!</span>
-    <img src="squam-pic.png" alt="squam, a small lego penguin" width="132" height="132">
+  <button class="penguin-wrap" id="penguin" aria-label="squaky + tam = squam">
+    <span class="squawk" id="squawk">squak!</span>
+    <img src="squam-pic.png" alt="squam" width="132" height="132">
   </button>
 
   <h1>LUCY TAM</h1>
-  <p class="tagline">design engineer - building thoughtful things for humans</p>
+  <p class="tagline">MechEng. Design. Development. Play.</p>
 
-  <a class="scroll-hint" href="#about" aria-label="scroll to about">
+  <a class="scroll-hint" href="#about" aria-label="aboutaboutabout">
     <svg width="26" height="34" viewBox="0 0 26 34" fill="none" stroke="#22221f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M13 2 V28 M5 20 L13 30 L21 20"/>
     </svg>
@@ -420,26 +471,42 @@ footer {
 
 <div class="divider" aria-hidden="true">
   <svg viewBox="0 0 1100 14" preserveAspectRatio="none" fill="none" stroke="#22221f" stroke-width="2" stroke-linecap="round">
-    <path d="M2 8 Q 60 3 120 8 T 240 7 T 360 9 T 480 6 T 600 8 T 720 7 T 840 9 T 960 6 T 1098 8"/>
+    <path d="M2 8"/> 
+    <!-- Q 60 3 120 8 T 240 7 T 360 9 T 480 6 T 600 8 T 720 7 T 840 9 T 960 6 T 1098 8 -->
   </svg>
 </div>
 
-
-
 <!-- ============ ABOUT ============ -->
-<section id="about">
+<section id="bio">
   <div class="section-head">
-    <h2>about</h2>
-    <span class="count">// the human behind the pen</span>
+    <h2>bio</h2>
+    <span class="count">/// what do I do and why?</span>
   </div>
 
   <div class="about-grid">
     <div class="bio reveal">
-      <p>I'm an innovation design engineer driven to deliver <span class="hl">meaningful impact in day-to-day living</span> — focusing on human-computer interaction and behavioural learning to strengthen individual agency.</p>
-      <p>My background is mechanical: a first-class MEng from Warwick, a placement year designing pharmaceutical automation, and ongoing medical device work. Now at the RCA &amp; Imperial, I'm turning that rigour toward how people <em>learn, focus, and grow</em> alongside technology.</p>
-      <p>Away from the desk I love to make things with my hands - cosplay builds, crafts, and origami. I also lead the RCA Climbing Society, so I'm probably thinking about this from halfway up a wall.</p>
+      <p>Hi! I'm Lucy, otherwise known as Squam!  I am many things, trained as a mechanical design engineer, 
+        but my best abilities are in <span class="hl">making things</span> and <span class="hl">making things happen.</span></p>
+      <p>My background is technical,  designing pharmaceutical automation, and ongoing medical device work.
+        Currently finishing my course in Innovation Design Engineering - a two year joint masters between Imperial College London, and the Royal College of Art! </p>
+
+      <div class="bio-logos">
+        <img src="Photo%20Assets/Bio/Logo_Imperial.png" alt="Imperial College London logo" class="bio-logo logo-imperial">
+        <img src="Photo%20Assets/Bio/Logo_RCA.png" alt="Royal College of Art logo" class="bio-logo">
+        <div class="logo-1851-wrap">
+          <img src="Photo%20Assets/Bio/Logo_1851.png" alt="Royal Commission for the Exhibition of 1851 logo" class="bio-logo logo-1851" tabindex="0">
+          <div class="speech-bubble">
+            As an <a href="https://royalcommission1851.org/previous-studentships" target="_blank" rel="noopener">Industrial Design Studentship</a> Award holder, my masters is fully funded by the Royal Commission of the Exhibition of 1851.
+          </div>
+        </div>
+      </div>
+
+      <p>For fun, I play sports - badminton and climbing (currently leading the RCA Climbing Society), and I love all sorts of craft, particularly origami and cosplay.
+        Every day is a lesson!
+      </p>
     </div>
 
+    <!--
     <div>
       <div class="fact-box sketch reveal">
         <h3>education</h3>
@@ -469,16 +536,18 @@ footer {
   </div>
 </section>
 
+
 <div class="divider" aria-hidden="true">
   <svg viewBox="0 0 1100 14" preserveAspectRatio="none" fill="none" stroke="#22221f" stroke-width="2" stroke-linecap="round">
     <path d="M2 8 Q 60 3 120 8 T 240 7 T 360 9 T 480 6 T 600 8 T 720 7 T 840 9 T 960 6 T 1098 8"/>
   </svg>
 </div>
+-->
 
 <!-- ============ CONTACT ============ -->
 <section id="contact" class="contact">
-  <h2>SAY HELLO</h2>
-  <p class="reveal">Open to conversations about design, agency, education, robots that smell, and anything worth building.</p>
+  <h2>find me here~</h2>
+  <p class="reveal">(or in the climbing gym...)</p>
   <div class="contact-links reveal">
     <a href="mailto:waiyingtam@outlook.com">email</a>
     <a href="https://www.linkedin.com/in/lucy-tam/" target="_blank" rel="noopener">linkedin</a>
@@ -528,6 +597,16 @@ penguin.addEventListener('click', () => {
   setTimeout(() => squeak.classList.remove('show'), 900);
   setTimeout(() => penguin.classList.remove('squeaking'), 950);
 });
+
+// 1851 logo speech bubble (click to toggle, click elsewhere to close)
+const logo1851Wrap = document.querySelector('.logo-1851-wrap');
+if (logo1851Wrap) {
+  logo1851Wrap.querySelector('.logo-1851').addEventListener('click', (e) => {
+    e.stopPropagation();
+    logo1851Wrap.classList.toggle('active');
+  });
+  document.addEventListener('click', () => logo1851Wrap.classList.remove('active'));
+}
 
 // fade-in on scroll
 const io = new IntersectionObserver(entries => {
