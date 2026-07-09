@@ -455,7 +455,7 @@ footer {
 
   <!-- penguin mascot (click me) -->
   <button class="penguin-wrap" id="penguin" aria-label="squaky + tam = squam">
-    <span class="squawk" id="squawk">squak!</span>
+    <span class="squawk" id="squawk"></span>
     <img src="squam-pic.png" alt="squam" width="132" height="132">
   </button>
 
@@ -463,7 +463,7 @@ footer {
   <p class="tagline">MechEng. Design. Development. Play.</p>
 
   <a class="scroll-hint" href="#about" aria-label="aboutaboutabout">
-    <svg width="26" height="34" viewBox="0 0 26 34" fill="none" stroke="#22221f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg width="26" height="48" viewBox="0 0 26 34" fill="none" stroke="#22221f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M13 2 V28 M5 20 L13 30 L21 20"/>
     </svg>
   </a>
@@ -476,11 +476,23 @@ footer {
   </svg>
 </div>
 
+<!-- ============ CONTACT ============ -->
+<section id="contact" class="contact">
+  <h2>find me at</h2>
+  <div class="contact-links reveal">
+    <a href="https://www.linkedin.com/in/lucy-tam/" target="_blank" rel="noopener">linkedin</a>
+    <a href="mailto:waiyingtam@outlook.com">email</a>
+    
+  </div>
+  <p></p>
+  <p class="reveal">or at your nearest climbing gym?</p>
+</section>
+
 <!-- ============ ABOUT ============ -->
 <section id="bio">
   <div class="section-head">
     <h2>bio</h2>
-    <span class="count">/// what do I do and why?</span>
+    <span class="count">/// what do I do</span>
   </div>
 
   <div class="about-grid">
@@ -544,18 +556,8 @@ footer {
 </div>
 -->
 
-<!-- ============ CONTACT ============ -->
-<section id="contact" class="contact">
-  <h2>find me here~</h2>
-  <p class="reveal">(or in the climbing gym...)</p>
-  <div class="contact-links reveal">
-    <a href="mailto:waiyingtam@outlook.com">email</a>
-    <a href="https://www.linkedin.com/in/lucy-tam/" target="_blank" rel="noopener">linkedin</a>
-  </div>
-</section>
-
 <!-- ============ PROJECTS ============ -->
-<section id="projects">
+<!--<section id="projects">
   <div class="section-head">
     <h2>projects</h2>
     <span class="count">// selected work</span>
@@ -572,6 +574,7 @@ footer {
 
   </div>
 </section>
+-->
 
 <div class="divider" aria-hidden="true">
   <svg viewBox="0 0 1100 14" preserveAspectRatio="none" fill="none" stroke="#22221f" stroke-width="2" stroke-linecap="round">
@@ -585,19 +588,6 @@ footer {
 </footer>
 
 <script>
-// squeaky penguin
-const penguin = document.getElementById('penguin');
-const squeak  = document.getElementById('squeak');
-const noises  = ['squak!', 'squak?', 'sqk?', 'SQUAK!!', '...squak'];
-let squeakCount = 0;
-penguin.addEventListener('click', () => {
-  squeak.textContent = noises[squeakCount++ % noises.length];
-  squeak.classList.add('show');
-  penguin.classList.add('squeaking');
-  setTimeout(() => squeak.classList.remove('show'), 900);
-  setTimeout(() => penguin.classList.remove('squeaking'), 950);
-});
-
 // 1851 logo speech bubble (click to toggle, click elsewhere to close)
 const logo1851Wrap = document.querySelector('.logo-1851-wrap');
 if (logo1851Wrap) {
