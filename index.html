@@ -443,7 +443,7 @@ footer {
   top: 0;                 /* JS overrides vertical position every frame */
   width: 50px;             /* sprite display size - bump up for a bigger crab */
   height: 50px;
-  z-index: 30;             /* below nav (z-index 50) and below the lobster (31) */
+  z-index: 30;             /* below nav (z-index 50) */
   pointer-events: auto;    /* keeps it clickable/tappable for the startle reaction */
   cursor: pointer;
   -webkit-user-drag: none;
@@ -453,51 +453,6 @@ footer {
 .crab-side img { display: block; width: 100%; height: 100%; image-rendering: pixelated; pointer-events: none; }
 /* smaller crab + tighter edge margin on phones */
 @media (max-width: 640px) { .crab-side { width: 38px; height: 38px; left: 3px; } }
-
-/* lobster: JS drives this one to whatever the cursor/touch point is
-   (see the rAF `loop()` near the end of the script). Resize it here;
-   the JS centering offsets (currently `x - 30`, `y - 46`) assume this
-   box is roughly 60x60, so if you resize a lot, nudge those offsets
-   in the script too so the lobster's feet line up with the cursor. */
-.lobster-pet {
-  position: fixed;
-  top: 0; left: 0;         /* JS overrides position every frame */
-  width: 60px;              /* sprite display size */
-  height: 60px;
-  z-index: 31;              /* above the crab so they don't fight for top layer */
-  pointer-events: auto;     /* keeps it clickable to cycle hats */
-  cursor: pointer;
-  will-change: transform;
-}
-.lobster-pet img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  image-rendering: pixelated; /* keeps the pixel art crisp when CSS-scaled up */
-  pointer-events: none;
-}
-@media (max-width: 640px) { .lobster-pet { width: 46px; height: 46px; } }
-
-/* speech-bubble text shown above the lobster on hat-click (reuses
-   the same look as the penguin's .squeak bubble up in the HERO
-   section). Edit the actual words in the SQUEAKS array in the script. */
-.lobster-squeak {
-  position: absolute;
-  top: -2rem;
-  left: 50%;
-  font-family: "Jersey 10", monospace;
-  font-size: 1.1rem;
-  padding: .05rem .55rem;
-  background: var(--paper);
-  border: var(--line) solid var(--ink);
-  border-radius: 9px;
-  opacity: 0;                                  /* hidden by default */
-  transform: translateX(-50%) scale(.6) rotate(6deg);
-  transition: opacity .15s, transform .15s;
-  pointer-events: none;
-  white-space: nowrap;
-}
-.lobster-squeak.show { opacity: 1; transform: translateX(-50%) scale(1) rotate(-3deg); } /* .show is toggled by JS */
 
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
@@ -509,11 +464,6 @@ footer {
 
 <!-- ============ SEA CRITTERS (roam the whole page) ============ -->
 <div class="crab-side" id="crabSide" role="button" aria-label="a small crab" tabindex="0"><img alt=""></div>
-
-<div class="lobster-pet" id="lobsterPet" role="button" aria-label="a small orange lobster wearing a hat, click to change its hat" tabindex="0">
-  <span class="lobster-squeak" id="lobsterSqueak"></span>
-  <img id="lobsterImg" alt="">
-</div>
 
 <!-- ============ NAV ============ -->
 <nav>
@@ -685,14 +635,6 @@ footer {
   </div>
 </section>
 
-
-
-<div class="divider" aria-hidden="true">
-  <svg viewBox="0 0 1100 14" preserveAspectRatio="none" fill="none" stroke="#22221f" stroke-width="2" stroke-linecap="round">
-    <path d="M2 6 Q 70 10 140 6 T 280 8 T 420 5 T 560 9 T 700 6 T 840 8 T 980 5 T 1098 7"/>
-  </svg>
-</div>
-
 <footer class="mono">
   <span>&copy; 2026 lucy tam</span>
   <span>squam</span>
@@ -725,17 +667,17 @@ const io = new IntersectionObserver(entries => {
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
 // ============================================================
-// SEA CRITTERS - pixel-art crab + lobster that roam the whole page
+// SEA CRITTERS - pixel-art crab that patrols the left edge
 //
 // HOW THIS WORKS, TOP TO BOTTOM:
 //  1. pixelSprite()/blobOn() - tiny helper functions that turn normal
 //     canvas drawing code into crisp, chunky "pixel art" images.
-//  2. HATS + drawLobster() + drawCrab() - the actual artwork, drawn
-//     with plain canvas shapes (ellipses/rects/lines). Edit colors,
-//     sizes and positions here to change how the critters LOOK.
-//  3. Everything from "const lobsterEl = ..." down is BEHAVIOUR -
-//     where they sit, how fast they move, and what happens on
-//     click/tap/hover. Edit that half to change how they ACT.
+//  2. drawCrab() - the actual artwork, drawn with plain canvas shapes
+//     (ellipses/lines). Edit colors/sizes/positions here to change how
+//     the crab LOOKS.
+//  3. Everything from "const crabEl = ..." down is BEHAVIOUR - where
+//     it sits, how fast it patrols, and what happens on click/tap/hover.
+//     Edit that half to change how it ACTS.
 // ============================================================
 (() => {
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -746,9 +688,9 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
   // without smoothing is what creates the blocky "pixel art" look.
   //   - Bigger loSize (e.g. 24-30) = more detail, softer/rounder pixels.
   //   - Smaller loSize (e.g. 10-14) = chunkier, more retro/8-bit look.
-  // The final on-page size is controlled purely by CSS (.crab-side /
-  // .lobster-pet width & height) - this loSize only affects how chunky
-  // the pixels look, not the physical size.
+  // The final on-page size is controlled purely by CSS (.crab-side
+  // width & height) - this loSize only affects how chunky the pixels
+  // look, not the physical size.
   function pixelSprite(hiSize, loSize, drawFn) {
     const hi = document.createElement('canvas');
     hi.width = hi.height = hiSize;
@@ -760,8 +702,8 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
     lctx.drawImage(hi, 0, 0, loSize, loSize);
     return lo.toDataURL('image/png');
   }
-  // Small helper used throughout drawLobster/drawCrab: draws a filled
-  // (and optionally outlined) ellipse. Used for body parts, eyes, claws...
+  // Small helper used throughout drawCrab: draws a filled (and
+  // optionally outlined) ellipse. Used for body parts, eyes, claws...
   // x,y = center; rx,ry = horizontal/vertical radius; fill/stroke = colors.
   function blobOn(ctx, x, y, rx, ry, fill, stroke, lw, rot) {
     ctx.beginPath();
@@ -771,116 +713,10 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
     if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lw; ctx.stroke(); }
   }
 
-  // Each hat is a small drawing function: (ctx, S, cx, topY) => void
-  //   S     = the sprite's full size in canvas units (0-256 here)
-  //   cx    = horizontal center of the lobster's head
-  //   topY  = the y-coordinate right above the head, where hats should sit
-  // To ADD a new hat: add a new `key: (ctx,S,cx,topY) => {...}` entry
-  // below, then add its key name to the HAT_ORDER array further down
-  // (that array is what actually controls which hats exist and the
-  // order the lobster cycles through them on click/tap).
-  // To REMOVE a hat: just delete its key from HAT_ORDER (leaving it
-  // defined here but unused is harmless).
-  const HATS = {
-    none: () => {},   // no hat - always keep this one so there's a "bare head" state
-    party: (ctx, S, cx, topY) => {
-      const baseY = topY + S * 0.10, tipY = topY - S * 0.10, halfW = S * 0.15;
-      ctx.fillStyle = '#7FC4C9';
-      ctx.beginPath();
-      ctx.moveTo(cx - halfW, baseY); ctx.lineTo(cx + halfW, baseY); ctx.lineTo(cx, tipY);
-      ctx.closePath(); ctx.fill();
-      ctx.strokeStyle = '#3D5A5C'; ctx.lineWidth = S * 0.02; ctx.stroke();
-      ctx.fillStyle = '#FFDD6B';
-      [[0.4, 0.75], [-0.2, 0.45], [0.15, 0.2]].forEach(([dx, dt]) => {
-        const yy = baseY + (tipY - baseY) * dt, ww = halfW * (1 - dt);
-        ctx.beginPath(); ctx.arc(cx + dx * ww, yy, S * 0.018, 0, Math.PI * 2); ctx.fill();
-      });
-      ctx.fillStyle = '#FFF3DC';
-      ctx.beginPath(); ctx.arc(cx, tipY - S * 0.02, S * 0.045, 0, Math.PI * 2); ctx.fill();
-      ctx.strokeStyle = '#3D5A5C'; ctx.lineWidth = S * 0.015; ctx.stroke();
-    },
-    top: (ctx, S, cx, topY) => {
-      const brimY = topY + S * 0.08;
-      ctx.fillStyle = '#2E2A28';
-      ctx.beginPath(); ctx.ellipse(cx, brimY, S * 0.20, S * 0.045, 0, 0, Math.PI * 2); ctx.fill();
-      ctx.strokeStyle = '#17140f'; ctx.lineWidth = S * 0.015; ctx.stroke();
-      ctx.fillRect(cx - S * 0.13, topY - S * 0.20, S * 0.26, S * 0.22);
-      ctx.strokeRect(cx - S * 0.13, topY - S * 0.20, S * 0.26, S * 0.22);
-      ctx.fillStyle = '#D9536A';
-      ctx.fillRect(cx - S * 0.13, topY - S * 0.03, S * 0.26, S * 0.045);
-    },
-    bow: (ctx, S, cx, topY) => {
-      const y = topY + S * 0.03;
-      ctx.fillStyle = '#F2668C';
-      [-1, 1].forEach(s => {
-        ctx.beginPath(); ctx.ellipse(cx + s * S * 0.09, y, S * 0.09, S * 0.065, s * -0.35, 0, Math.PI * 2); ctx.fill();
-        ctx.strokeStyle = '#8f2e46'; ctx.lineWidth = S * 0.018;
-        ctx.beginPath(); ctx.ellipse(cx + s * S * 0.09, y, S * 0.09, S * 0.065, s * -0.35, 0, Math.PI * 2); ctx.stroke();
-      });
-      ctx.fillStyle = '#c94467';
-      ctx.beginPath(); ctx.arc(cx, y, S * 0.035, 0, Math.PI * 2); ctx.fill();
-    },
-    crown: (ctx, S, cx, topY) => {
-      const baseY = topY + S * 0.10, peakY = topY - S * 0.08;
-      ctx.fillStyle = '#FFCE4A';
-      ctx.beginPath();
-      ctx.moveTo(cx - S * 0.16, baseY); ctx.lineTo(cx - S * 0.16, baseY - S * 0.06);
-      ctx.lineTo(cx - S * 0.08, peakY); ctx.lineTo(cx, baseY - S * 0.10);
-      ctx.lineTo(cx + S * 0.08, peakY); ctx.lineTo(cx + S * 0.16, baseY - S * 0.06);
-      ctx.lineTo(cx + S * 0.16, baseY); ctx.closePath(); ctx.fill();
-      ctx.strokeStyle = '#B8842A'; ctx.lineWidth = S * 0.018; ctx.stroke();
-      ctx.fillStyle = '#E24B6B';
-      [-0.08, 0, 0.08].forEach(dx => { ctx.beginPath(); ctx.arc(cx + dx * S, baseY - S * 0.06, S * 0.018, 0, Math.PI * 2); ctx.fill(); });
-    },
-  };
-
-  // Draws the lobster, front-facing and chibi/plush-style (inspired by
-  // the Jellycat Celebration Crustacean). Everything is done in pairs
-  // via `[-1, 1].forEach(s => ...)`, where `s` flips left/right (-1 or
-  // +1) so each shape only needs to be written once and mirrors itself
-  // automatically - e.g. one claw definition draws BOTH claws. Edit a
-  // color/size once and both sides update together.
-  //   `hat` = one of the HATS keys above ('none' | 'party' | 'top' | 'bow' | 'crown')
-  function drawLobster(ctx, S, hat) {
-    const cx = S / 2;                          // horizontal center of the whole sprite
-    ctx.clearRect(0, 0, S, S);
-    ctx.lineJoin = 'round'; ctx.lineCap = 'round';
-    const lw = S * 0.035, outline = '#263838';  // shared outline thickness + color
-
-    // antennae (drawn first, so the head/claws sit on top of their base)
-    ctx.strokeStyle = outline; ctx.lineWidth = S * 0.03;
-    [-1, 1].forEach(s => {
-      ctx.beginPath();
-      ctx.moveTo(cx + s * S * 0.10, S * 0.30);
-      ctx.quadraticCurveTo(cx + s * S * 0.30, S * 0.05, cx + s * S * 0.22, -S * 0.02);
-      ctx.stroke();
-    });
-
-    // tail (peeks out from behind the body, near the bottom)
-    blobOn(ctx, cx, S * 0.86, S * 0.30, S * 0.16, '#263838', outline, lw);
-    // claws - the big round "mitts" either side of the head. Change the
-    // fill color ('#F2894A') or radii (0.20 / 0.22) to resize/recolor them.
-    [-1, 1].forEach(s => blobOn(ctx, cx + s * S * 0.34, S * 0.44, S * 0.20, S * 0.22, '#263838', outline, lw));
-    ctx.strokeStyle = outline; ctx.lineWidth = S * 0.025;
-    [-1, 1].forEach(s => { ctx.beginPath(); ctx.moveTo(cx + s * 0.40 * S, S * 0.40); ctx.lineTo(cx + s * 0.30 * S, S * 0.44); ctx.stroke(); }); // claw pincer notch
-
-    // head/body - the main round shape. '#E8703A' is the lobster's base orange.
-    blobOn(ctx, cx, S * 0.52, S * 0.30, S * 0.28, '#263838', outline, lw);
-    blobOn(ctx, cx, S * 0.62, S * 0.16, S * 0.13, '##EFF8E2', null); // cream belly patch
-    ctx.globalAlpha = 0.7;
-    [-1, 1].forEach(s => blobOn(ctx, cx + s * S * 0.17, S * 0.54, S * 0.05, S * 0.035, '#263838', null)); // cheeks
-    ctx.globalAlpha = 1;
-    [-1, 1].forEach(s => blobOn(ctx, cx + s * S * 0.09, S * 0.44, S * 0.035, S * 0.045, '##EFF8E2', null)); // eyes
-
-    // little legs peeking out under the body
-    ctx.strokeStyle = outline; ctx.lineWidth = S * 0.025;
-    [-1, 1].forEach(s => { ctx.beginPath(); ctx.moveTo(cx + s * S * 0.20, S * 0.72); ctx.lineTo(cx + s * S * 0.26, S * 0.80); ctx.stroke(); });
-
-    // hat goes last so it sits on top of everything; S*0.24 = topY (just above the head)
-    (HATS[hat || 'none'])(ctx, S, cx, S * 0.24);
-  }
-
-  // Draws the crab: same mirrored left/right approach as the lobster.
+  // Draws the crab. Each body part is done in pairs via
+  // `[-1, 1].forEach(s => ...)`, where `s` flips left/right (-1 or +1)
+  // so each shape only needs to be written once and mirrors itself
+  // automatically. Edit a color/size once and both sides update together.
   // `body`/`dark` are the two colors used everywhere below - change
   // those two lines to recolor the whole crab in one go.
   function drawCrab(ctx, S) {
@@ -910,42 +746,14 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
     ctx.globalAlpha = 1;
   }
 
-  const lobsterEl = document.getElementById('lobsterPet');
   const crabEl = document.getElementById('crabSide');
-  if (!lobsterEl || !crabEl) return;
+  if (!crabEl) return;
 
-  // The order hats cycle through on click/tap. Add/remove/reorder keys
-  // here (they must match keys defined in HATS above). 'none' is a real
-  // entry too - keep it in the list if you want a "bare head" option.
-  const HAT_ORDER = ['none', 'party', 'top', 'bow', 'crown'];
-  // Pre-render one sprite per hat, once, at page load (256 = hi-res
-  // drawing size fed to pixelSprite, 20 = final pixel-grid chunkiness -
-  // see the pixelSprite() comment above for what these two numbers do).
-  const lobsterSprites = HAT_ORDER.map(h => pixelSprite(256, 20, (ctx, S) => drawLobster(ctx, S, h)));
   const crabSrc = pixelSprite(220, 16, drawCrab);
-
-  const lobsterImg = document.getElementById('lobsterImg');
-  const squeakEl = document.getElementById('lobsterSqueak');
   crabEl.querySelector('img').src = crabSrc;
 
-  let hatIndex = 0;
-  lobsterImg.src = lobsterSprites[hatIndex]; // starting hat = HAT_ORDER[0] ('none')
-
-  // Random text shown in the speech bubble each time the hat changes.
-  // Add/remove/edit strings freely - one is picked at random per click.
-  const SQUEAKS = ['?', '??', '!!', '!?', '!'];
-  function cycleHat() {
-    hatIndex = (hatIndex + 1) % lobsterSprites.length;
-    lobsterImg.src = lobsterSprites[hatIndex];
-    squeakEl.textContent = SQUEAKS[Math.floor(Math.random() * SQUEAKS.length)];
-    squeakEl.classList.add('show');
-    clearTimeout(cycleHat._t);
-    cycleHat._t = setTimeout(() => squeakEl.classList.remove('show'), 900); // 900ms = how long the bubble stays visible
-  }
-  lobsterEl.addEventListener('click', cycleHat);
-  lobsterEl.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); cycleHat(); } });
-
   // ---------- global cursor / touch tracking (Pointer Events cover both mouse and touch) ----------
+  // Only used for the crab's "startle when the cursor gets close" reaction.
   let pointer = { x: window.innerWidth * 0.5, y: window.innerHeight * 0.4 };
   let pointerActive = false, lastMove = 0;
   function setPointer(clientX, clientY) {
@@ -955,21 +763,6 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
   }
   window.addEventListener('pointermove', e => setPointer(e.clientX, e.clientY), { passive: true });
   window.addEventListener('pointerdown', e => setPointer(e.clientX, e.clientY), { passive: true });
-
-  let lobsterPos = { x: pointer.x, y: pointer.y }; // lobster's current (eased) position, in viewport pixels
-  let lobsterPrevX = lobsterPos.x;                 // used just to detect which way it's moving (for the left/right flip)
-
-  // Where the lobster drifts to when the cursor/finger has been still
-  // for a while (see the 4000ms check in loop() below). Purely
-  // decorative sine-wave wander - tweak the divisors to speed it up
-  // (smaller number = faster) or the multipliers to widen/narrow the path.
-  function lobsterIdlePoint(t) {
-    const w = window.innerWidth, h = window.innerHeight;
-    return {
-      x: w * 0.5 + Math.sin(t / 3000) * w * 0.28,
-      y: Math.min(h - 120, h * 0.35 + Math.sin(t / 2200) * 60),
-    };
-  }
 
   // ---------- crab: continuous vertical patrol along the left edge ----------
   // CRAB_X/CRAB_HALF describe where the crab actually sits on screen,
@@ -1006,33 +799,11 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
   crabEl.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pokeCrab(); } });
 
   // Main animation loop - runs every frame (~60x/sec) while reduced-motion
-  // is off. Positions both critters via `element.style.transform`.
+  // is off. Positions the crab via `element.style.transform`.
   function loop(t) {
     // "Active" = the user touched/moved the pointer within the last 4
-    // seconds. While active the lobster chases the real cursor; once it
-    // goes quiet for 4000ms, it falls back to the idle wander above.
-    // Raise/lower 4000 to change how quickly it "gets bored" and wanders off.
+    // seconds - only while active does the crab check proximity.
     const isActive = pointerActive && performance.now() - lastMove < 4000;
-    const goal = isActive ? pointer : lobsterIdlePoint(t);
-    // Ease toward the goal instead of snapping straight to it - this is
-    // what gives the lobster its laggy, floaty "following" feel.
-    //   0.09 = how much of the remaining distance it closes each frame.
-    //   Bigger (e.g. 0.2) = snappier/more responsive.
-    //   Smaller (e.g. 0.04) = slower, dreamier, more lag.
-    lobsterPos.x += (goal.x - lobsterPos.x) * 0.09;
-    lobsterPos.y += (goal.y - lobsterPos.y) * 0.09;
-
-    // Flip the sprite to face the direction it's currently travelling.
-    const facing = lobsterPos.x < lobsterPrevX ? -1 : 1;
-    lobsterPrevX = lobsterPos.x;
-    // -30 / -46 recenter the 60x60 sprite roughly on the cursor point
-    // (tip of the claws near the tip, feet near the bottom) - adjust if
-    // you resize .lobster-pet in the CSS.
-    lobsterEl.style.transform = `translate(${lobsterPos.x - 30}px, ${lobsterPos.y - 46}px)`;
-    // NOTE: the flip is applied to the <img> only (not lobsterEl itself)
-    // so the speech-bubble text riding along in lobsterEl never gets
-    // mirrored/reversed.
-    lobsterImg.style.transform = `scaleX(${facing})`;
 
     const crabY = crabPatrolY(t);
     if (isActive) {
@@ -1051,8 +822,7 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
   if (reducedMotion) {
     // No animation loop at all when the user prefers reduced motion -
-    // just park both critters in a sensible static spot once.
-    lobsterEl.style.transform = `translate(${window.innerWidth * 0.5 - 30}px, ${window.innerHeight * 0.35 - 46}px)`;
+    // just park the crab in a sensible static spot once.
     crabEl.style.transform = `translate(0px, ${crabTopMargin}px)`;
   } else {
     requestAnimationFrame(loop);
