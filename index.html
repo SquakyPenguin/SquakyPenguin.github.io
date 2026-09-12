@@ -9,456 +9,10 @@
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Micro+5&family=Jersey+10&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Micro+5&family=Jersey+10&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 
-<style>
-/* ============================================================
-   Lucy Tam - portfolio website
-   ============================================================ */
-:root {
-  --paper:   #DFDFC3;
-  --ink:     #344C4C;
-  --ink-soft:#296B72;
-  --pen:     #5D9372;
-  --marker:  #C8DC5A;
-  --line:    2px;
-}
+<link rel="stylesheet" href="styles.css">
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-html { scroll-behavior: smooth; }
-
-body {
-  background: var(--paper);
-  color: var(--ink);
-  font-family: "IBM Plex Sans", sans-serif;
-  font-size: 16px;
-  line-height: 1.6;
-  overflow-x: hidden;
-  /* faint dot-grid, like a sketchbook page */
-  background-image: radial-gradient(rgba(26, 85, 72, 0.01) 1px, transparent 1px);
-  background-size: 30px 30px;
-}
-
-::selection { background: var(--marker); }
-
-/* ---------- clean borders ---------- */
-.sketch {
-  border: var(--line) solid var(--ink);
-  border-radius: 5px;
-}
-
-/* underlined links */
-a {
-  color: var(--ink);
-  text-decoration: underline;
-  text-decoration-color: var(--pen);
-  text-decoration-thickness: 1.6px;
-  text-underline-offset: 4px;
-  transition: color .15s;
-}
-a:hover { color: var(--pen); }
-
-/* ---------- typography ---------- */
-h1, h2, h3 { font-weight: 400; line-height: 1.05; }
-
-.mono {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: .82rem;
-  letter-spacing: .02em;
-  color: var(--ink-soft);
-}
-
-/* marker-highlight behind words */
-.hl {
-  background: linear-gradient(104deg,
-    transparent .6%,
-    var(--marker) 2.4%,
-    var(--marker) 97.8%,
-    transparent 98%);
-  padding: 0 .25em;
-  border-radius: 2px;
-}
-
-/* ============================================================
-   NAV
-   ============================================================ */
-nav {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: .9rem clamp(1rem, 4vw, 3rem);
-  background: color-mix(in srgb, var(--paper) 92%, transparent);
-  backdrop-filter: blur(4px);
-  border-bottom: var(--line) solid var(--ink);
-}
-nav .logo {
-  font-family: "Micro 5", monospace;
-  font-size: 2.4rem;
-  text-decoration: none;
-}
-nav ul {
-  display: flex;
-  gap: clamp(.9rem, 3vw, 2rem);
-  list-style: none;
-}
-nav ul a {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: .85rem;
-  text-decoration: none;
-}
-nav ul a:hover {
-  text-decoration: underline;
-  text-decoration-color: var(--pen);
-  text-underline-offset: 4px;
-}
-
-/* ============================================================
-   HERO - minimal text, one penguin
-   ============================================================ */
-.hero {
-  min-height: calc(100svh - 62px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 2rem 1rem 4rem;
-  position: relative;
-}
-
-.hero h1 {
-  font-family: "Micro 5", monospace;
-  font-size: clamp(4.5rem, 16vw, 11rem);
-  letter-spacing: .01em;
-}
-
-.hero .tagline {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: clamp(.85rem, 2.4vw, 1.05rem);
-  color: var(--ink-soft);
-  max-width: 34ch;
-  margin-top: .6rem;
-}
-
-/* penguin mascot */
-.penguin-wrap {
-  margin-bottom: .5rem;
-  cursor: pointer;
-  position: relative;
-  border: none;
-  background: none;
-}
-.penguin-wrap img {
-  display: block;
-  width: 132px;
-  height: 132px;
-  object-fit: cover;
-  border: var(--line) solid var(--ink);
-  border-radius: 10px;
-}
-.penguin-wrap:hover img { animation: waddle .8s ease-in-out infinite; }
-.penguin-wrap.squeaking img { animation: waddle .3s ease-in-out 3; }
-@keyframes waddle {
-  0%, 100% { transform: rotate(-4deg); }
-  50%      { transform: rotate(4deg); }
-}
-.squeak {
-  position: absolute;
-  top: -14px;
-  right: -58px;
-  font-family: "Jersey 10", monospace;
-  font-size: 1.2rem;
-  padding: .1rem .6rem;
-  background: var(--paper);
-  border: var(--line) solid var(--ink);
-  border-radius: 10px;
-  opacity: 0;
-  transform: scale(.6) rotate(8deg);
-  transition: opacity .15s, transform .15s;
-  pointer-events: none;
-  white-space: nowrap;
-}
-.squeak.show { opacity: 1; transform: scale(1) rotate(-3deg); }
-
-/* scroll hint arrow */
-.scroll-hint {
-  position: absolute;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  animation: bob 2s ease-in-out infinite;
-}
-@keyframes bob {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50%      { transform: translateX(-50%) translateY(8px); }
-}
-
-/* ============================================================
-   SECTIONS
-   ============================================================ */
-section { padding: 4.5rem clamp(1rem, 5vw, 4rem); max-width: 1100px; margin: 0 auto; }
-
-.section-head {
-  display: flex;
-  align-items: baseline;
-  gap: 1rem;
-  margin-bottom: 2.2rem;
-}
-.section-head h2 {
-  font-family: "Jersey 10", monospace;
-  font-size: clamp(2.4rem, 6vw, 3.6rem);
-}
-.section-head .count {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: .85rem;
-  color: var(--pen);
-}
-
-/* horizontal divider between sections */
-.divider {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 clamp(1rem, 5vw, 4rem);
-}
-.divider::after {
-  content: "";
-  display: block;
-  border-top: var(--line) solid var(--ink);
-}
-
-/* ============================================================
-   PROJECT CARDS
-   ============================================================ */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-  gap: 1.6rem;
-}
-
-.card {
-  background: var(--paper);
-  padding: 1.1rem 1.1rem 1.3rem;
-  display: flex;
-  flex-direction: column;
-  gap: .7rem;
-  transition: transform .18s ease, box-shadow .18s ease;
-}
-.card:nth-child(odd)  { transform: rotate(-.4deg); }
-.card:nth-child(even) { transform: rotate(.4deg); }
-.card:hover {
-  transform: rotate(0deg) translateY(-4px);
-  box-shadow: 4px 5px 0 rgba(34,34,31,.9);
-}
-
-.card h3 {
-  font-family: "Jersey 10", monospace;
-  font-size: 1.75rem;
-}
-.card p { font-size: .93rem; color: var(--ink-soft); }
-
-/* placeholder image frames - replace the .ph div with an <img> */
-.ph {
-  aspect-ratio: 4 / 3;
-  position: relative;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
-  background:
-    linear-gradient(to top right,    transparent calc(50% - 1px), rgba(34,34,31,.35) 50%, transparent calc(50% + 1px)),
-    linear-gradient(to bottom right, transparent calc(50% - 1px), rgba(34,34,31,.35) 50%, transparent calc(50% + 1px));
-}
-.ph span {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: .7rem;
-  color: var(--ink-soft);
-  background: var(--paper);
-  padding: .2rem .6rem;
-  border: 1.5px dashed var(--ink-soft);
-  border-radius: 4px;
-}
-.card img.ph-img {  /* use this class when swapping in real images */
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  border: var(--line) solid var(--ink);
-  border-radius: 10px;
-}
-.card img.swap-img { cursor: pointer; }
-
-/* ============================================================
-   ABOUT
-   ============================================================ */
-.about-grid {
-  display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  gap: 2.5rem;
-  align-items: start;
-}
-@media (max-width: 780px) { .about-grid { grid-template-columns: 1fr; } }
-
-.about-grid .bio p + p { margin-top: 1rem; }
-
-/* logo row (Imperial / RCA / 1851) */
-.bio-logos {
-  display: flex;
-  align-items: center;
-  gap: 1.6rem;
-  margin: 1rem 0;
-}
-.bio-logo {
-  width: clamp(50px, 11vw, 90px);
-  height: clamp(50px, 11vw, 90px);
-  object-fit: contain;
-}
-.logo-imperial { filter: saturate(0%); }
-.logo-1851-wrap { position: relative; display: inline-flex; }
-.logo-1851 { cursor: pointer; }
-
-/* speech bubble for the 1851 logo, shown on hover or click */
-.speech-bubble {
-  display: none;
-  position: absolute;
-  left: calc(100% + 14px);
-  top: 50%;
-  transform: translateY(-50%);
-  width: 230px;
-  background: var(--paper);
-  border: var(--line) solid var(--ink);
-  border-radius: 10px;
-  padding: .75rem .9rem;
-  font-size: .82rem;
-  line-height: 1.45;
-  color: var(--ink);
-  box-shadow: 3px 4px 0 rgba(34,34,31,.9);
-  z-index: 10;
-}
-.speech-bubble::before {
-  content: "";
-  position: absolute;
-  right: 100%;
-  top: 50%;
-  transform: translateY(-50%);
-  border: 8px solid transparent;
-  border-right-color: var(--ink);
-}
-.logo-1851-wrap:hover .speech-bubble,
-.logo-1851-wrap.active .speech-bubble {
-  display: block;
-}
-@media (max-width: 780px) {
-  .speech-bubble { left: 0; top: calc(100% + 10px); transform: none; }
-  .speech-bubble::before { display: none; }
-}
-
-.fact-box {
-  padding: 1.3rem 1.4rem;
-  margin-bottom: 1.4rem;
-}
-.fact-box h3 {
-  font-family: "Jersey 10", monospace;
-  font-size: 1.5rem;
-  margin-bottom: .6rem;
-  color: var(--pen);
-}
-.fact-box ul { list-style: none; }
-.fact-box li {
-  font-size: .9rem;
-  padding-left: 1.3rem;
-  position: relative;
-  margin-bottom: .45rem;
-}
-/* arrow bullet */
-.fact-box li::before {
-  content: "\2192";
-  position: absolute;
-  left: 0;
-}
-.fact-box li em { font-style: normal; color: var(--ink-soft); font-size: .82rem; }
-
-/* ============================================================
-   CONTACT / FOOTER
-   ============================================================ */
-.contact { text-align: center; padding-bottom: 3rem; }
-.contact h2 {
-  font-family: "Micro 5", monospace;
-  font-size: clamp(3rem, 9vw, 5.5rem);
-  margin-bottom: 1rem;
-}
-.contact p { color: var(--ink-soft); max-width: 42ch; margin: 0 auto 2rem; }
-.contact-links {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 1.2rem;
-}
-.contact-links a {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: .95rem;
-  padding: .55rem 1.3rem;
-  text-decoration: none;
-  border: var(--line) solid var(--ink);
-  border-radius: 10px;
-  transition: transform .15s, box-shadow .15s, color .15s;
-}
-.contact-links a:hover {
-  transform: translateY(-3px);
-  box-shadow: 3px 4px 0 rgba(34,34,31,.9);
-}
-
-footer {
-  border-top: var(--line) solid var(--ink);
-  padding: 1.2rem clamp(1rem, 4vw, 3rem);
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: .5rem;
-}
-
-/* fade-in on scroll */
-.reveal { opacity: 0; transform: translateY(18px); transition: opacity .5s ease, transform .5s ease; }
-.reveal.in { opacity: 1; transform: none; }
-
-/* ============================================================
-   SEA CRITTERS - roam the whole page
-   All sprite artwork + movement is generated in the <script> at the
-   bottom of the page (search "SEA CRITTERS" there). This CSS only
-   controls each critter's SIZE, its fixed on-screen anchor, and
-   stacking order - actual position each frame is set via JS
-   (element.style.transform), so moving these els with CSS alone
-   won't do much beyond resizing them.
-   ============================================================ */
-
-/* crab: pinned to the left edge, JS animates it up/down (see
-   crabPatrolY in the script). To move it to the right edge instead,
-   change `left: 6px` to `right: 6px` here AND update CRAB_X in the
-   script to match (it's used for the cursor-proximity math). */
-.crab-side {
-  position: fixed;
-  left: 6px;              /* distance from the left edge of the viewport */
-  top: 0;                 /* JS overrides vertical position every frame */
-  width: 50px;             /* sprite display size - bump up for a bigger crab */
-  height: 50px;
-  z-index: 30;             /* below nav (z-index 50) */
-  pointer-events: auto;    /* keeps it clickable/tappable for the startle reaction */
-  cursor: pointer;
-  -webkit-user-drag: none;
-  user-select: none;
-  will-change: transform;
-}
-.crab-side img { display: block; width: 100%; height: 100%; image-rendering: pixelated; pointer-events: none; }
-/* smaller crab + tighter edge margin on phones */
-@media (max-width: 640px) { .crab-side { width: 38px; height: 38px; left: 3px; } }
-
-@media (prefers-reduced-motion: reduce) {
-  * { animation: none !important; transition: none !important; }
-  .reveal { opacity: 1; transform: none; }
-}
-</style>
 </head>
 <body>
 
@@ -466,26 +20,39 @@ footer {
 <div class="crab-side" id="crabSide" role="button" aria-label="a small crab" tabindex="0"><img alt=""></div>
 
 <!-- ============ NAV ============ -->
-<nav>
+<nav id="siteNav">
   <a class="logo" href="#top">squam</a>
-  <ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navMenu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul id="navMenu">
       <li><a href="#bio">bio</a></li>
     <li><a href="#contact">contact</a></li>
      <li><a href="#projects">recent projects</a></li>
+     <li><a href="#press">press</a></li>
   </ul>
 </nav>
 
 <!-- ============ HERO ============ -->
 <header class="hero" id="top">
 
+  <img class="hero-bg" src="Photo Assets/Landing/climbingsquam2.png" alt="" aria-hidden="true">
+
   <!-- penguin mascot (click me) -->
   <button class="penguin-wrap" id="penguin" aria-label="squaky + tam = squam">
-    <span class="squawk" id="squawk"></span>
     <img src="squam-pic.png" alt="squam" width="132" height="132">
   </button>
 
   <h1>LUCY TAM</h1>
   <p class="tagline">MechEng. Design. Development. Play!</p>
+
+  <!-- "currently working on" tile - content comes from NOW_CARD in
+       project-content.js, filled in by script below. -->
+  <div class="now-card">
+    <h3 id="nowCardHeading"></h3>
+    <div id="nowCardImage"></div>
+    <p id="nowCardDesc"></p>
+  </div>
 
   <a class="scroll-hint" href="#about" aria-label="aboutaboutabout">
     <svg width="26" height="48" viewBox="0 0 26 34" fill="none" stroke="#22221f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -535,8 +102,12 @@ footer {
         Currently finishing my course in Innovation Design Engineering - a two year joint masters between Imperial College London, and the Royal College of Art! </p>
 
       <div class="bio-logos">
-        <img src="Photo%20Assets/Bio/Logo_Imperial.png" alt="Imperial College London logo" class="bio-logo logo-imperial">
-        <img src="Photo%20Assets/Bio/Logo_RCA.png" alt="Royal College of Art logo" class="bio-logo">
+        <a href="https://www.imperial.ac.uk/study/courses/postgraduate-taught/innovation-design-engineering/" target="_blank" rel="noopener">
+          <img src="Photo%20Assets/Bio/Logo_Imperial.png" alt="Imperial College London logo" class="bio-logo logo-imperial">
+        </a>
+        <a href="https://2026.rca.ac.uk/school/innovation-design-engineering-ma-msc/" target="_blank" rel="noopener">
+          <img src="Photo%20Assets/Bio/Logo_RCA.png" alt="Royal College of Art logo" class="bio-logo">
+        </a>
         <div class="logo-1851-wrap">
           <img src="Photo%20Assets/Bio/Logo_1851.png" alt="Royal Commission for the Exhibition of 1851 logo" class="bio-logo logo-1851" tabindex="0">
           <div class="speech-bubble">
@@ -604,8 +175,13 @@ footer {
   </div>
   <div class="grid">
 
-<article class="card sketch reveal">
-  <img src="Photo Assets/BuildBeyond1.png" data-alt-src="Photo Assets/BuildBeyond2.jpg" alt="Project Name" class="ph-img swap-img">
+<!-- NOTE: hero images below point to Photo Assets/Heroes/<name>_hero.* - the
+     folder didn't exist yet when this was written, so double check the actual
+     filenames/extensions in there match once you've added the files. Click a
+     card to open its full detail modal (edit the PROJECTS object in the
+     script at the bottom of the page to fill in real descriptions/links). -->
+<article class="card sketch reveal" data-project="buildbeyond" tabindex="0" role="button" aria-haspopup="dialog">
+  <img src="Photo Assets/Heroes/BuildBeyond_hero.png" alt="Build Beyond" class="ph-img">
   <h3>Build Beyond</h3>
   <p class="mono">Masters Solo Project / Feb 2026 - ongoing</p>
       <p>Rethinking instruction based play for opportunities to practice creative thinking.
@@ -614,29 +190,29 @@ footer {
       <p class="mono"><a href="BuildBeyond/Build Beyond Intro Deck Lucy Tam 2026.pdf" download>&#8595; download intro deck (PDF)</a></p>
 </article>
 
-    <article class="card sketch reveal">
-      <img src="Photo Assets/SomethingOS2.PNG" data-alt-src="Photo Assets/SomethingOS1.PNG" alt="Project Name" class="ph-img swap-img">
+    <article class="card sketch reveal" data-project="somethingos" tabindex="0" role="button" aria-haspopup="dialog">
+      <img src="Photo Assets/Heroes/SomethingOS_hero.png" alt="SomethingOS" class="ph-img">
       <h3>SomethingOS</h3>
       <p class="mono">Masters Group Project / 3 months Sep 2025</p>
       <p>The smartphone operating system designed to protect your attention, using an intention based user interface.</p>
     </article>
 
-    <article class="card sketch reveal">
-      <img src="Photo Assets/Cyberphysicalsystems1.png" data-alt-src="Photo Assets/Cyberphysicalsystems2.png" alt="Project Name" class="ph-img swap-img">
+    <article class="card sketch reveal" data-project="underseamusicians" tabindex="0" role="button" aria-haspopup="dialog">
+      <img src="Photo Assets/Heroes/Cyberphysicalsystems_hero.png" alt="Undersea Musicians" class="ph-img">
       <h3>Undersea Musicians</h3>
       <p class="mono">IDE / 5 weeks 2024</p>
       <p>A mechanical underwater creature themed band of instruments that play music responding to ones physical imitations of various sea creatures.</p>
     </article>
 
-    <article class="card sketch reveal">
-      <img src="Photo Assets/Supergreen1.png" data-alt-src="Photo Asset/Supergreen2.png" alt="Project Name" class="ph-img swap-img">
+    <article class="card sketch reveal" data-project="sheepsprout" tabindex="0" role="button" aria-haspopup="dialog">
+      <img src="Photo Assets/Heroes/Supergreen_hero.png" alt="Sheepsprout" class="ph-img">
       <h3>Sheepsprout</h3>
       <p class="mono">IDE / 4 weeks 2025</p>
       <p>The use of waste wool for use in garden planters for aerating plant roots.</p>
     </article>
 
-    <article class="card sketch reveal">
-      <img src="Photo Assets/DesignSprint2.JPG" data-alt-src="Photo Assets/GERF2.png" alt="Project Name" class="ph-img swap-img">
+    <article class="card sketch reveal" data-project="stemoutreach" tabindex="0" role="button" aria-haspopup="dialog">
+      <img src="Photo Assets/Heroes/DesignSprint_hero.png" alt="Various STEM outreach and education events" class="ph-img">
       <h3>Various STEM outreach and education events.</h3>
       <p class="mono">Ongoing</p>
       <p>I have been significantly involved with STEM events including running exhibits for GERF London and working with Big Ideas to run school workshops.</p>
@@ -645,12 +221,93 @@ footer {
   </div>
 </section>
 
+<div class="divider" aria-hidden="true">
+  <svg viewBox="0 0 1100 14" preserveAspectRatio="none" fill="none" stroke="#22221f" stroke-width="2" stroke-linecap="round">
+    <path d="M2 8"/>
+  </svg>
+</div>
+
+<!-- ============ PRESS / MEDIA ============ -->
+<section id="press">
+  <div class="section-head">
+    <h2>press &amp; media</h2>
+    <span class="count">/// out in the wild</span>
+  </div>
+  <div class="media-embed reveal">
+    <iframe src="https://www.youtube.com/embed/pCsgt2R5kMQ" title="Press feature video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+  </div>
+</section>
+
+<!-- ============ PROJECT DETAIL MODAL ============ -->
+<div class="modal-overlay" id="projectModal" aria-hidden="true">
+  <div class="modal sketch" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+
+    <div class="modal-gallery">
+      <div class="modal-photo-wrap" id="modalPhotoWrap">
+        <img class="modal-photo" id="modalPhoto" src="" alt="">
+        <div class="photo-caption" id="modalCaption"></div>
+      </div>
+      <button class="gallery-nav prev" id="modalPrevBtn" aria-label="Previous photo">&#8592;</button>
+      <button class="gallery-nav next" id="modalNextBtn" aria-label="Next photo">&#8594;</button>
+    </div>
+    <div class="modal-dots" id="modalDots"></div>
+
+    <h3 id="modalTitle"></h3>
+    <p class="mono modal-meta" id="modalMeta"></p>
+    <div class="modal-description" id="modalDescription"></div>
+    <div class="modal-links" id="modalLinks"></div>
+    <div class="modal-next">
+      <h4>What's next for this project?</h4>
+      <p class="modal-next-text" id="modalWhatsNext"></p>
+    </div>
+  </div>
+</div>
+
 <footer class="mono">
   <span>&copy; 2026 lucy tam</span>
   <span>squam</span>
 </footer>
 
+<script src="project-content.js"></script>
 <script>
+// "right now" tile - render from NOW_CARD (project-content.js)
+if (typeof NOW_CARD !== 'undefined') {
+  const headingEl = document.getElementById('nowCardHeading');
+  const imageEl = document.getElementById('nowCardImage');
+  const descEl = document.getElementById('nowCardDesc');
+  if (headingEl) headingEl.textContent = NOW_CARD.heading;
+  if (descEl) descEl.textContent = NOW_CARD.description;
+  if (imageEl) {
+    if (NOW_CARD.image && NOW_CARD.image.src) {
+      imageEl.innerHTML = '';
+      const img = document.createElement('img');
+      img.className = 'ph-img';
+      img.src = NOW_CARD.image.src;
+      img.alt = NOW_CARD.image.alt || '';
+      imageEl.appendChild(img);
+    } else {
+      imageEl.innerHTML = '<div class="ph"><span>add image</span></div>';
+    }
+  }
+}
+
+// mobile nav: hamburger toggle (top-right menu icon under the mobile breakpoint)
+const siteNav = document.getElementById('siteNav');
+const navToggle = document.getElementById('navToggle');
+if (siteNav && navToggle) {
+  const closeNav = () => {
+    siteNav.classList.remove('nav-open');
+    navToggle.setAttribute('aria-expanded', 'false');
+  };
+  navToggle.addEventListener('click', () => {
+    const open = siteNav.classList.toggle('nav-open');
+    navToggle.setAttribute('aria-expanded', String(open));
+  });
+  siteNav.querySelectorAll('#navMenu a').forEach(a => a.addEventListener('click', closeNav));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeNav(); });
+}
+
 // 1851 logo speech bubble (click to toggle, click elsewhere to close)
 const logo1851Wrap = document.querySelector('.logo-1851-wrap');
 if (logo1851Wrap) {
@@ -661,14 +318,117 @@ if (logo1851Wrap) {
   document.addEventListener('click', () => logo1851Wrap.classList.remove('active'));
 }
 
-// project card photos: click to swap between two images
-document.querySelectorAll('.swap-img').forEach(img => {
-  img.addEventListener('click', () => {
-    const current = img.src;
-    img.src = img.dataset.altSrc;
-    img.dataset.altSrc = current;
+// ============================================================
+// PROJECT DETAIL MODAL - click a card to see the full write-up.
+// Photo captions, descriptions, links and "what's next" copy all
+// live in project-content.js (loaded above) - edit that file, not
+// this one, to update any project's content.
+// ============================================================
+
+(() => {
+  const overlay = document.getElementById('projectModal');
+  if (!overlay) return;
+  const photoEl = document.getElementById('modalPhoto');
+  const captionEl = document.getElementById('modalCaption');
+  const dotsEl = document.getElementById('modalDots');
+  const titleEl = document.getElementById('modalTitle');
+  const metaEl = document.getElementById('modalMeta');
+  const descEl = document.getElementById('modalDescription');
+  const linksEl = document.getElementById('modalLinks');
+  const nextEl = document.getElementById('modalWhatsNext');
+  const prevBtn = document.getElementById('modalPrevBtn');
+  const nextBtn = document.getElementById('modalNextBtn');
+  const closeBtn = document.getElementById('modalClose');
+
+  let current = null, photoIndex = 0, lastFocused = null;
+
+  function renderPhoto() {
+    const photo = current.photos[photoIndex];
+    photoEl.src = photo.src;
+    photoEl.alt = current.title;
+    captionEl.textContent = photo.caption || '';
+    captionEl.classList.remove('show');
+    [...dotsEl.children].forEach((d, i) => d.classList.toggle('active', i === photoIndex));
+  }
+
+  function openModal(id) {
+    const data = PROJECTS[id];
+    if (!data) return;
+    current = data;
+    photoIndex = 0;
+
+    titleEl.textContent = data.title;
+    metaEl.textContent = data.meta;
+    descEl.innerHTML = data.description;
+    nextEl.textContent = data.whatsNext;
+
+    linksEl.innerHTML = '';
+    data.links.forEach(link => {
+      const a = document.createElement('a');
+      a.href = link.href;
+      a.textContent = link.label;
+      if (link.download) { a.setAttribute('download', ''); }
+      else { a.target = '_blank'; a.rel = 'noopener'; }
+      linksEl.appendChild(a);
+    });
+    linksEl.style.display = data.links.length ? 'flex' : 'none';
+
+    dotsEl.innerHTML = '';
+    data.photos.forEach((_, i) => {
+      const b = document.createElement('button');
+      b.setAttribute('aria-label', `Photo ${i + 1}`);
+      b.addEventListener('click', () => { photoIndex = i; renderPhoto(); });
+      dotsEl.appendChild(b);
+    });
+
+    renderPhoto();
+
+    lastFocused = document.activeElement;
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden', 'false');
+    closeBtn.focus();
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if (lastFocused) lastFocused.focus();
+  }
+
+  document.querySelectorAll('.card[data-project]').forEach(card => {
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('a')) return; // let in-card links (eg. PDF download) behave normally
+      openModal(card.dataset.project);
+    });
+    card.addEventListener('keydown', (e) => {
+      if ((e.key === 'Enter' || e.key === ' ') && !e.target.closest('a')) {
+        e.preventDefault();
+        openModal(card.dataset.project);
+      }
+    });
   });
-});
+
+  closeBtn.addEventListener('click', closeModal);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && overlay.classList.contains('open')) closeModal(); });
+
+  // click a photo to toggle its caption bubble - same pattern as the 1851 logo
+  document.getElementById('modalPhotoWrap').addEventListener('click', (e) => {
+    e.stopPropagation();
+    captionEl.classList.toggle('show');
+  });
+
+  prevBtn.addEventListener('click', () => {
+    photoIndex = (photoIndex - 1 + current.photos.length) % current.photos.length;
+    renderPhoto();
+  });
+  nextBtn.addEventListener('click', () => {
+    photoIndex = (photoIndex + 1) % current.photos.length;
+    renderPhoto();
+  });
+})();
 
 // fade-in on scroll
 const io = new IntersectionObserver(entries => {

@@ -1,0 +1,731 @@
+/* ============================================================
+   Lucy Tam - portfolio website
+   Layout language inspired by githubuniverse.com: sticky nav that
+   collapses to a hamburger on mobile, bold oversized headlines,
+   alternating colour-blocked sections, strong-bordered cards,
+   asterisk dividers, high-contrast CTA buttons.
+   ============================================================ */
+
+:root {
+  /* ---- palette (edit these to re-theme the whole site) ---- */
+  --teal:        #296B72;   /* deep teal - links, accents, dark section bg */
+  --green:       #5D9372;   /* muted green - secondary accent, mono labels */
+  --lime:        #C8DC5A;   /* lime - highlight marker, hover accents */
+  --paper:       #DBDFC3;   /* pale khaki - default page/section bg */
+  --cream:       #FDE7C2;   /* pale peach - alternate section bg */
+  --orange:      #F09452;   /* orange - primary CTA buttons */
+  --ink:         #344C4C;   /* dark teal/charcoal - body text, dark bg, borders */
+  --coral:       #E56363;   /* coral/red - alerts, hover-state accent */
+
+  /* ---- semantic aliases (change the mapping, not every rule) ---- */
+  --bg:          var(--paper);
+  --bg-alt:      var(--cream);
+  --bg-dark:     var(--ink);
+  --text:        var(--ink);
+  --text-on-dark:var(--paper);
+  --text-soft:   var(--teal);
+  --accent:      var(--orange);
+  --accent-2:    var(--coral);
+  --line:        2px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  background-image: radial-gradient(rgba(52, 76, 76, 0.05) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+::selection { background: var(--lime); color: var(--ink); }
+
+/* ---------- clean borders ---------- */
+.sketch {
+  border: var(--line) solid var(--ink);
+  border-radius: 0;
+}
+
+/* underlined links */
+a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--green);
+  text-decoration-thickness: 1.6px;
+  text-underline-offset: 4px;
+  transition: color .15s;
+}
+a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+
+/* ---------- typography ---------- */
+h1, h2, h3 { font-weight: 400; line-height: 1.05; }
+
+.mono {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: .82rem;
+  letter-spacing: .02em;
+  color: var(--text-soft);
+}
+
+/* marker-highlight behind words */
+.hl {
+  background: linear-gradient(104deg,
+    transparent .6%,
+    var(--lime) 2.4%,
+    var(--lime) 97.8%,
+    transparent 98%);
+  padding: 0 .25em;
+  border-radius: 0;
+}
+
+/* ============================================================
+   NAV - sticky, collapses to a hamburger icon (top right) on mobile
+   ============================================================ */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .9rem clamp(1rem, 4vw, 3rem);
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(4px);
+  border-bottom: var(--line) solid var(--ink);
+}
+nav .logo {
+  font-family: "Micro 5", monospace;
+  font-size: 2.4rem;
+  text-decoration: none;
+}
+nav ul {
+  display: flex;
+  gap: clamp(.9rem, 3vw, 2rem);
+  list-style: none;
+}
+nav ul a {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: .85rem;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  text-decoration: none;
+}
+nav ul a:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 4px;
+}
+
+/* hamburger button - hidden on desktop, shown under the mobile breakpoint */
+.nav-toggle {
+  display: none;
+  position: relative;
+  width: 38px;
+  height: 38px;
+  border: var(--line) solid var(--ink);
+  border-radius: 0;
+  background: var(--bg);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.nav-toggle span {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  height: 2px;
+  background: var(--ink);
+  transition: transform .2s ease, opacity .2s ease, top .2s ease;
+}
+.nav-toggle span:nth-child(1) { top: 12px; }
+.nav-toggle span:nth-child(2) { top: 18px; }
+.nav-toggle span:nth-child(3) { top: 24px; }
+nav.nav-open .nav-toggle span:nth-child(1) { top: 18px; transform: rotate(45deg); }
+nav.nav-open .nav-toggle span:nth-child(2) { opacity: 0; }
+nav.nav-open .nav-toggle span:nth-child(3) { top: 18px; transform: rotate(-45deg); }
+
+@media (max-width: 700px) {
+  .nav-toggle { display: block; }
+
+  nav ul {
+    position: fixed;
+    inset: 0;
+    z-index: 49;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    background: var(--bg-dark);
+    /* collapsed by default */
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition: opacity .2s ease, transform .2s ease;
+  }
+  nav.nav-open ul {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+  nav ul a {
+    color: var(--text-on-dark);
+    font-size: 1.3rem;
+  }
+  nav ul a:hover { color: var(--lime); text-decoration-color: var(--lime); }
+}
+
+/* ============================================================
+   HERO - dark colour-blocked panel, oversized display type
+   ============================================================ */
+.hero {
+  min-height: calc(100svh - 62px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 1rem 4rem;
+  position: relative;
+  background: var(--bg-dark);
+  color: var(--text-on-dark);
+  overflow: hidden;
+}
+
+/* large landing image behind the profile picture, filling the hero */
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+}
+/* dark tint over the photo so the headline/tagline stay legible on top of it */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: color-mix(in srgb, var(--bg-dark) 72%, transparent);
+}
+.hero > *:not(.hero-bg) {
+  position: relative;
+  z-index: 2;
+}
+
+.hero h1 {
+  font-family: "Micro 5", monospace;
+  font-size: clamp(4.5rem, 16vw, 11rem);
+  letter-spacing: .01em;
+  color: var(--paper);
+}
+
+.hero .tagline {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: clamp(.85rem, 2.4vw, 1.05rem);
+  color: var(--lime);
+  max-width: 34ch;
+  margin-top: .6rem;
+}
+
+/* penguin mascot */
+.penguin-wrap {
+  margin-bottom: .5rem;
+  cursor: pointer;
+  position: relative;
+  border: none;
+  background: none;
+}
+.penguin-wrap img {
+  display: block;
+  width: 132px;
+  height: 132px;
+  object-fit: cover;
+  border: var(--line) solid var(--paper);
+  border-radius: 0;
+}
+.penguin-wrap:hover img { animation: waddle .8s ease-in-out infinite; }
+@keyframes waddle {
+  0%, 100% { transform: rotate(-4deg); }
+  50%      { transform: rotate(4deg); }
+}
+
+/* "currently working on" tile - same visual language as the project
+   cards further down the page (border, padding, placeholder image slot)
+   but static, since it isn't a clickable card. */
+.now-card {
+  position: relative;
+  z-index: 2;
+  width: min(360px, 88vw);
+  margin-top: 2rem;
+  background: var(--bg);
+  border: var(--line) solid var(--ink);
+  border-radius: 0;
+  padding: 1.1rem 1.1rem 1.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: .7rem;
+  text-align: left;
+  box-shadow: 5px 6px 0 var(--ink);
+}
+.now-card h3 {
+  font-family: "Jersey 10", monospace;
+  font-size: 1.4rem;
+  color: var(--ink);
+}
+.now-card p { font-size: .93rem; color: var(--text-soft); }
+
+/* scroll hint arrow */
+.scroll-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: bob 2s ease-in-out infinite;
+}
+.scroll-hint svg { stroke: var(--paper); }
+@keyframes bob {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%      { transform: translateX(-50%) translateY(8px); }
+}
+
+/* ============================================================
+   SECTIONS
+   ============================================================ */
+section { padding: 4.5rem clamp(1rem, 5vw, 4rem); max-width: 1100px; margin: 0 auto; }
+
+/* alternating colour-blocked backgrounds, full-bleed behind each section */
+#bio, #press { background: var(--bg-alt); }
+#bio, #press { box-shadow: 0 0 0 100vmax var(--bg-alt); clip-path: inset(0 -100vmax); }
+#projects { background: var(--bg); }
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 2.2rem;
+  flex-wrap: wrap;
+}
+.section-head h2 {
+  font-family: "Jersey 10", monospace;
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  text-transform: uppercase;
+}
+.section-head .count {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: .85rem;
+  color: var(--green);
+}
+
+/* asterisk divider between sections, GitHub-Universe style */
+.divider {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 5vw, 4rem);
+}
+.divider svg { display: none; }
+.divider::after {
+  content: "* * *";
+  display: block;
+  text-align: center;
+  font-family: "IBM Plex Mono", monospace;
+  letter-spacing: .6em;
+  color: var(--green);
+  padding: .4rem 0 .1rem;
+}
+
+/* ============================================================
+   PROJECT CARDS
+   ============================================================ */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 1.6rem;
+}
+
+.card {
+  background: var(--bg);
+  border: var(--line) solid var(--ink);
+  border-radius: 0;
+  padding: 1.1rem 1.1rem 1.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: .7rem;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 5px 6px 0 var(--ink);
+  border-color: var(--accent);
+}
+
+.card h3 {
+  font-family: "Jersey 10", monospace;
+  font-size: 1.75rem;
+}
+.card p { font-size: .93rem; color: var(--text-soft); }
+
+/* placeholder image frames - replace the .ph div with an <img> */
+.ph {
+  aspect-ratio: 4 / 3;
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    linear-gradient(to top right,    transparent calc(50% - 1px), rgba(52,76,76,.35) 50%, transparent calc(50% + 1px)),
+    linear-gradient(to bottom right, transparent calc(50% - 1px), rgba(52,76,76,.35) 50%, transparent calc(50% + 1px));
+}
+.ph span {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: .7rem;
+  color: var(--text-soft);
+  background: var(--bg);
+  padding: .2rem .6rem;
+  border: 1.5px dashed var(--text-soft);
+  border-radius: 0;
+}
+.card img.ph-img {  /* use this class when swapping in real images */
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border: var(--line) solid var(--ink);
+  border-radius: 0;
+}
+.card[data-project] { cursor: pointer; }
+
+/* ============================================================
+   PROJECT DETAIL MODAL (click a card to expand)
+   ============================================================ */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(52, 76, 76, .7);
+  padding: clamp(1rem, 4vw, 3rem);
+  overflow-y: auto;
+}
+.modal-overlay.open { display: flex; align-items: flex-start; justify-content: center; }
+
+.modal {
+  position: relative;
+  background: var(--bg);
+  border: var(--line) solid var(--ink);
+  border-radius: 0;
+  max-width: 720px;
+  width: 100%;
+  margin: auto 0;
+  padding: 1.6rem 1.6rem 2rem;
+  box-shadow: 6px 7px 0 var(--ink);
+}
+.modal-close {
+  position: absolute;
+  top: .7rem;
+  right: .8rem;
+  width: 34px;
+  height: 34px;
+  border: var(--line) solid var(--ink);
+  border-radius: 0;
+  background: var(--bg);
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--ink);
+}
+.modal-close:hover { color: var(--accent-2); border-color: var(--accent-2); }
+
+.modal-gallery { position: relative; margin-bottom: 1rem; }
+.modal-photo-wrap { position: relative; cursor: pointer; }
+.modal-photo {
+  display: block;
+  margin: 0 auto;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 70vh;
+  border: var(--line) solid var(--ink);
+  border-radius: 0;
+}
+.gallery-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border: var(--line) solid var(--ink);
+  border-radius: 0;
+  background: var(--bg);
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--ink);
+}
+.gallery-nav:hover { color: var(--accent); border-color: var(--accent); }
+.gallery-nav.prev { left: -14px; }
+.gallery-nav.next { right: -14px; }
+@media (max-width: 560px) {
+  .gallery-nav.prev { left: 4px; }
+  .gallery-nav.next { right: 4px; }
+}
+
+/* photo caption bubble - click a photo to toggle, same idea as the 1851 logo bubble */
+.photo-caption {
+  display: none;
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  max-width: 88%;
+  background: var(--bg);
+  border: var(--line) solid var(--ink);
+  border-radius: 0;
+  padding: .6rem .8rem;
+  font-size: .82rem;
+  line-height: 1.4;
+  box-shadow: 3px 4px 0 var(--ink);
+}
+.photo-caption.show { display: block; }
+
+.modal-dots { display: flex; justify-content: center; gap: .4rem; margin-bottom: 1.2rem; }
+.modal-dots button {
+  width: 9px;
+  height: 9px;
+  border-radius: 0;
+  border: 1.5px solid var(--ink);
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+.modal-dots button.active { background: var(--accent); border-color: var(--accent); }
+
+.modal h3 { font-family: "Jersey 10", monospace; font-size: 1.9rem; }
+.modal-meta { margin-bottom: .8rem; }
+.modal-description p + p { margin-top: .8rem; }
+.modal-links { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1.1rem; }
+.modal-links a {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: .85rem;
+  padding: .4rem 1rem;
+  text-decoration: none;
+  border: var(--line) solid var(--ink);
+  border-radius: 0;
+}
+.modal-links a:hover { color: var(--ink); background: var(--accent); border-color: var(--accent); }
+.modal-next {
+  margin-top: 1.4rem;
+  padding-top: 1.2rem;
+  border-top: 1.5px dashed var(--green);
+}
+.modal-next h4 {
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--green);
+  margin-bottom: .4rem;
+}
+
+/* ============================================================
+   PRESS / MEDIA
+   ============================================================ */
+.media-embed {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  aspect-ratio: 16 / 9;
+  margin: 0 auto;
+  border: var(--line) solid var(--ink);
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: 5px 6px 0 var(--ink);
+}
+.media-embed iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+/* ============================================================
+   ABOUT
+   ============================================================ */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+@media (max-width: 780px) { .about-grid { grid-template-columns: 1fr; } }
+
+.about-grid .bio p + p { margin-top: 1rem; }
+
+/* logo row (Imperial / RCA / 1851) */
+.bio-logos {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+  margin: 1rem 0;
+}
+.bio-logo {
+  width: clamp(50px, 11vw, 90px);
+  height: clamp(50px, 11vw, 90px);
+  object-fit: contain;
+}
+.bio-logos a { display: inline-flex; }
+.logo-imperial { filter: saturate(0%); }
+.logo-1851-wrap { position: relative; display: inline-flex; }
+.logo-1851 { cursor: pointer; }
+
+/* speech bubble for the 1851 logo, shown on hover or click */
+.speech-bubble {
+  display: none;
+  position: absolute;
+  left: calc(100% + 14px);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 230px;
+  background: var(--bg);
+  border: var(--line) solid var(--ink);
+  border-radius: 0;
+  padding: .75rem .9rem;
+  font-size: .82rem;
+  line-height: 1.45;
+  color: var(--ink);
+  box-shadow: 3px 4px 0 var(--ink);
+  z-index: 10;
+}
+.speech-bubble::before {
+  content: "";
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 8px solid transparent;
+  border-right-color: var(--ink);
+}
+.logo-1851-wrap:hover .speech-bubble,
+.logo-1851-wrap.active .speech-bubble {
+  display: block;
+}
+@media (max-width: 780px) {
+  .speech-bubble { left: 0; top: calc(100% + 10px); transform: none; }
+  .speech-bubble::before { display: none; }
+}
+
+.fact-box {
+  padding: 1.3rem 1.4rem;
+  margin-bottom: 1.4rem;
+}
+.fact-box h3 {
+  font-family: "Jersey 10", monospace;
+  font-size: 1.5rem;
+  margin-bottom: .6rem;
+  color: var(--green);
+}
+.fact-box ul { list-style: none; }
+.fact-box li {
+  font-size: .9rem;
+  padding-left: 1.3rem;
+  position: relative;
+  margin-bottom: .45rem;
+}
+/* arrow bullet */
+.fact-box li::before {
+  content: "\2192";
+  position: absolute;
+  left: 0;
+}
+.fact-box li em { font-style: normal; color: var(--text-soft); font-size: .82rem; }
+
+/* ============================================================
+   CONTACT / FOOTER - dark colour-blocked panel with high-contrast CTAs
+   ============================================================ */
+.contact {
+  text-align: center;
+  padding-bottom: 3rem;
+  background: var(--bg-dark);
+  color: var(--text-on-dark);
+}
+.contact { box-shadow: 0 0 0 100vmax var(--bg-dark); clip-path: inset(0 -100vmax); }
+.contact h2 {
+  font-family: "Micro 5", monospace;
+  font-size: clamp(3rem, 9vw, 5.5rem);
+  margin-bottom: 1rem;
+  color: var(--paper);
+}
+.contact p { color: var(--lime); max-width: 42ch; margin: 0 auto 2rem; }
+.contact-links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+}
+.contact-links a {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: .95rem;
+  padding: .55rem 1.3rem;
+  text-decoration: none;
+  color: var(--ink);
+  background: var(--accent);
+  border: var(--line) solid var(--ink);
+  border-radius: 0;
+  transition: transform .15s, box-shadow .15s, background .15s;
+}
+.contact-links a:hover {
+  background: var(--lime);
+  transform: translateY(-3px);
+  box-shadow: 3px 4px 0 var(--paper);
+}
+
+footer {
+  background: var(--bg-dark);
+  color: var(--text-on-dark);
+  border-top: var(--line) solid var(--paper);
+  padding: 1.2rem clamp(1rem, 4vw, 3rem);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+footer span { font-family: "IBM Plex Mono", monospace; }
+
+/* fade-in on scroll */
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity .5s ease, transform .5s ease; }
+.reveal.in { opacity: 1; transform: none; }
+
+/* ============================================================
+   SEA CRITTERS - roam the whole page
+   All sprite artwork + movement is generated in the <script> at the
+   bottom of the page (search "SEA CRITTERS" there). This CSS only
+   controls each critter's SIZE, its fixed on-screen anchor, and
+   stacking order - actual position each frame is set via JS
+   (element.style.transform), so moving these els with CSS alone
+   won't do much beyond resizing them.
+   ============================================================ */
+
+/* crab: pinned to the left edge, JS animates it up/down (see
+   crabPatrolY in the script). To move it to the right edge instead,
+   change `left: 6px` to `right: 6px` here AND update CRAB_X in the
+   script to match (it's used for the cursor-proximity math). */
+.crab-side {
+  position: fixed;
+  left: 6px;              /* distance from the left edge of the viewport */
+  top: 0;                 /* JS overrides vertical position every frame */
+  width: 50px;             /* sprite display size - bump up for a bigger crab */
+  height: 50px;
+  z-index: 30;             /* below nav (z-index 50) */
+  pointer-events: auto;    /* keeps it clickable/tappable for the startle reaction */
+  cursor: pointer;
+  -webkit-user-drag: none;
+  user-select: none;
+  will-change: transform;
+}
+.crab-side img { display: block; width: 100%; height: 100%; image-rendering: pixelated; pointer-events: none; }
+/* smaller crab + tighter edge margin on phones */
+@media (max-width: 640px) { .crab-side { width: 38px; height: 38px; left: 3px; } }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+  .reveal { opacity: 1; transform: none; }
+}
