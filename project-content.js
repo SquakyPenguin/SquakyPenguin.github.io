@@ -27,7 +27,7 @@
 const NOW_CARD = {
   heading: "Right now, I am working on...",
   image: {
-    src: "Photo Assets/Landing/currentlyworkingon.JPG",   // e.g. "Photo Assets/Landing/current-project.png"
+    src: "Photo Assets/Landing/currentlyworkingon.jpg",   // e.g. "Photo Assets/Landing/current-project.png"
     alt: ""    // describe the image once you add one
   },
   description: "Organising the Sciopolis x Dyson exhibition (11-12 September) with my friend Jubilee!"
@@ -38,7 +38,7 @@ const PROJECTS = {
     title: "Build Beyond",
     meta: "Masters Solo Project / Feb 2026 - ongoing",
     photos: [
-      { src: "Photo Assets/Heroes/BuildBeyond_hero.png", caption: "[add a caption for this photo]" },
+      { src: "Photo Assets/Heroes/BuildBeyond_hero.jpg", caption: "[add a caption for this photo]" },
       //{ src: "Photo Assets/BuildBeyond1.png", caption: "[add a caption for this photo]" },
       { src: "Photo Assets/BuildBeyond2.JPG", caption: "[add a caption for this photo]" }
     ],
@@ -52,8 +52,8 @@ const PROJECTS = {
     title: "SomethingOS",
     meta: "Masters Group Project / 3 months Sep 2025",
     photos: [
-      { src: "Photo Assets/Heroes/SomethingOS_hero.png", caption: "[add a caption for this photo]" },
-      { src: "Photo Assets/SomethingOS1.PNG", caption: "[add a caption for this photo]" },
+      { src: "Photo Assets/Heroes/SomethingOS_Hero.jpg", caption: "[add a caption for this photo]" },
+      { src: "Photo Assets/SomethingOS1.jpg", caption: "[add a caption for this photo]" },
       //{ src: "Photo Assets/SomethingOS2.PNG", caption: "[add a caption for this photo]" }
     ],
     description: "<p>The smartphone operating system designed to protect your attention, using an intention based user interface.</p><p>[Add a more in-depth description here.]</p>",
@@ -64,9 +64,9 @@ const PROJECTS = {
     title: "Undersea Musicians",
     meta: "IDE / 5 weeks 2024",
     photos: [
-      { src: "Photo Assets/Heroes/Cyberphysicalsystems_hero.png", caption: "[add a caption for this photo]" },
-      { src: "Photo Assets/Cyberphysicalsystems1.png", caption: "[add a caption for this photo]" },
-      { src: "Photo Assets/Cyberphysicalsystems2.png", caption: "[add a caption for this photo]" }
+      { src: "Photo Assets/Heroes/Cyberphysicalsystems_hero.jpg", caption: "[add a caption for this photo]" },
+      //{ src: "Photo Assets/Cyberphysicalsystems1.png", caption: "[add a caption for this photo]" }, // file no longer on disk
+      { src: "Photo Assets/Cyberphysicalsystems2.jpg", caption: "[add a caption for this photo]" }
     ],
     description: "<p>A mechanical underwater creature themed band of instruments that play music responding to one's physical imitations of various sea creatures.</p><p>[Add a more in-depth description here.]</p>",
     links: [],
@@ -76,9 +76,9 @@ const PROJECTS = {
     title: "Sheepsprout",
     meta: "IDE / 4 weeks 2025",
     photos: [
-      { src: "Photo Assets/Heroes/Supergreen_hero.png", caption: "[add a caption for this photo]" },
-      { src: "Photo Assets/Supergreen1.png", caption: "[add a caption for this photo]" },
-      { src: "Photo Assets/Supergreen2.png", caption: "[add a caption for this photo]" }
+      { src: "Photo Assets/Heroes/Supergreen_Hero.jpg", caption: "[add a caption for this photo]" },
+      //{ src: "Photo Assets/Supergreen1.png", caption: "[add a caption for this photo]" }, // file no longer on disk - only a .HEIC copy remains
+      { src: "Photo Assets/Supergreen2.jpg", caption: "[add a caption for this photo]" }
     ],
     description: "<p>The use of waste wool for use in garden planters for aerating plant roots.</p><p>[Add a more in-depth description here.]</p>",
     links: [],
@@ -88,10 +88,10 @@ const PROJECTS = {
     title: "Various STEM outreach and education events.",
     meta: "Ongoing",
     photos: [
-      { src: "Photo Assets/Heroes/DesignSprint_hero.png", caption: "[add a caption for this photo]" },
-      { src: "Photo Assets/DesignSprint1.png", caption: "[add a caption for this photo]" },
-      { src: "Photo Assets/DesignSprint2.JPG", caption: "[add a caption for this photo]" },
-      { src: "Photo Assets/GERF2.png", caption: "[add a caption for this photo]" }
+      { src: "Photo Assets/Heroes/DesignSprint_hero.jpg", caption: "[add a caption for this photo]" },
+      { src: "Photo Assets/DesignSprint1.jpg", caption: "[add a caption for this photo]" },
+      //{ src: "Photo Assets/DesignSprint2.JPG", caption: "[add a caption for this photo]" }, // file no longer on disk
+      { src: "Photo Assets/GERF2.jpg", caption: "[add a caption for this photo]" }
     ],
     description: "<p>I have been significantly involved with STEM events including running exhibits for GERF London and working with Big Ideas to run school workshops.</p><p>[Add a more in-depth description here.]</p>",
     links: [],
